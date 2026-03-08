@@ -1,3 +1,5 @@
+import Headers from "@/components/ui/Headers";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,8 @@ export default function RootLayout({
 }>) {
   return (
    <>
-   <h1>Desde Panther Layout</h1>
+    <Headers />
+
     {children}
    </>
   );
