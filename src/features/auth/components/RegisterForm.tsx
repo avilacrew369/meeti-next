@@ -4,18 +4,20 @@ import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
 
 import { Form, FormError, FormInput, FormLabel, FormSubmit } from "@/src/shared/components/forms";
-import { SingUpSchema } from "../schemas/authSchema";
+import { SingUpInput, SingUpSchema } from "../schemas/authSchema";
+import { signUpAction } from "../actions/auth-actions";
 
 export default function RegisterForm() {
 
         const {register, handleSubmit, formState: {errors}} = useForm({
-                resolver: zodResolver(SingUpSchema)
+                resolver: zodResolver(SingUpSchema),
+                mode: "all"
         })
 
-        console.log(errors)
+       
 
-        const onSubmit = () => {
-                console.log("Submit...")
+        const onSubmit = async (data : SingUpInput) => {
+                await signUpAction(data)
         }
 
   return (
