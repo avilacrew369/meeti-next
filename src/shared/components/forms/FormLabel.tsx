@@ -1,6 +1,9 @@
+import {LabelHTMLAttributes} from "react";
 
-export default function FormLabel() {
+type Props = LabelHTMLAttributes<HTMLLabelElement>
+
+export default function FormLabel(props: Props) {
   return (
-    <div>FormLabel</div>
+     <label  {...props}   className="block" >{props.children}</label>
   )
 }
