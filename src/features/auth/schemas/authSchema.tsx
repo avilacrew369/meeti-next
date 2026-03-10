@@ -7,8 +7,12 @@ export const BaseAuthSchema = z.object({
     passwordConfirmation: z.string().trim().min(1, {error: 'La confirmación de contraseña es Obligatoria'}),
  
 })
-
-export const SingUpSchema = BaseAuthSchema.pick({
+export const SignInSchema = BaseAuthSchema.pick({
+    email: true,
+}).extend({
+    password:z.string().trim().min(1, {error: 'El password no puede ir vacio'}),
+})
+export const SignUpSchema = BaseAuthSchema.pick({
     name: true, 
     email: true, 
     password: true, 
@@ -18,4 +22,5 @@ export const SingUpSchema = BaseAuthSchema.pick({
     path: ['passwordConfirmation']
 })
     
-export type SingUpInput = z.infer<typeof SingUpSchema>
+export type SignUpInput = z.infer<typeof SignUpSchema>
+export type SignInInput = z.infer<typeof SignInSchema>
