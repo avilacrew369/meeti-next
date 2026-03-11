@@ -5,6 +5,7 @@ export const BaseAuthSchema = z.object({
     email: z.email( {error:  'E-email no es válido'}),
     password: z.string().trim().min(8, {error: 'La contraseña debe tener al menos 8 caracteres'}),
     passwordConfirmation: z.string().trim().min(1, {error: 'La confirmación de contraseña es Obligatoria'}),
+    newPassword: z.string().trim().min(8, {error: 'La contraseña debe tener al menos 8 caracteres'}),
  
 })
 
@@ -27,7 +28,16 @@ export const SignUpSchema = BaseAuthSchema.pick({
 export const ForgotPasswordSchema = BaseAuthSchema.pick({
     email: true
 })
+
+export const SetPasswordSchema = BaseAuthSchema.pick({
+    newPassword: true,
+    passwordConfirmation: true
+}).refine((data) => data.newPassword === data.passwordConfirmation, {
+    error: 'Los passwords no coinciden',
+    path: ['passwordConfirmation']
+})
     
 export type SignUpInput = z.infer<typeof SignUpSchema>
 export type SignInInput = z.infer<typeof SignInSchema>
 export type ForgotPasswordInput = z.infer<typeof ForgotPasswordSchema>
+export type SetPasswordInput = z.infer<typeof SetPasswordSchema>
