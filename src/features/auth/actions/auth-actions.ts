@@ -1,7 +1,7 @@
 "use server"
 
 import { error } from "console"
-import { SignInInput, SignInSchema, SignUpInput, SignUpSchema,  } from "../schemas/authSchema"
+import { ForgotPasswordInput, ForgotPasswordSchema, SignInInput, SignInSchema, SignUpInput, SignUpSchema,  } from "../schemas/authSchema"
 import { success } from "zod"
 import { authService } from "../services/AuthService"
 import { da } from "zod/locales"
@@ -31,4 +31,17 @@ export async function signInAction(input: SignInInput){
     }
     const response = await authService.login(data.data)
     return response
+}
+
+export async function forgotPasswordAction(input: ForgotPasswordInput) {
+    const data = ForgotPasswordSchema.safeParse(input)
+    if(!data.success) {
+        return{
+            error: 'hubo un error...',
+            success: ''
+        }
+    }
+    const response = await authService.requestPasswordReset(data.data)
+    return response
+
 }

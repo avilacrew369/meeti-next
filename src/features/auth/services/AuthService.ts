@@ -1,5 +1,5 @@
 import { auth } from "@/src/lib/auth"
-import { SignInInput, SignUpInput } from "../schemas/authSchema"
+import { ForgotPasswordInput, SignInInput, SignUpInput } from "../schemas/authSchema"
 import { APIError, success } from "better-auth"
 import { authRepository, IAauthRepository } from "./AuthRepository"
 import { headers } from "next/headers"
@@ -91,6 +91,20 @@ class AuthService {
          }
 
 }
+    async requestPasswordReset(input: ForgotPasswordInput) {
+        const user = await this.authRepository.userExists(input.email)
+        if(!user){
+            return {
+                error: 'El usuario no existe...',
+                success: ''
+            }
+        }
+        return {
+            error: '',
+            success: ''
+        }
+
+    }
 }
 
 export const authService = new AuthService(authRepository)

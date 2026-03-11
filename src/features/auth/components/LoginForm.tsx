@@ -15,7 +15,7 @@ export default function LoginForm() {
     mode: 'all',
   })
 
-  const onSubmit = async (data: SignInInput) => {
+ const onSubmit = async (data: SignInInput) => {
     const { error, success } = await signInAction(data)
       if(error) {
        toast.error(error)

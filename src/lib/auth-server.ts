@@ -19,5 +19,3 @@ import { auth } from './auth'
         }
         
     }
-
-    const { isAuth } = await requireAuth()
