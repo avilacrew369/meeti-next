@@ -1,7 +1,12 @@
-import { pgTable, uuid, varchar} from  "drizzle-orm/pg-core";
+import { InferInsertModel } from "drizzle-orm";
+import { pgTable, uuid, varchar, text, timestamp} from  "drizzle-orm/pg-core";
 
-export const communities = pgTable('communities', {
+export const community = pgTable('communities', {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    createdBy: text('created_by').notNull()
    
 });
+
