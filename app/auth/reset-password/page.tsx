@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import SetPasswordForm from '@/src/features/auth/components/SetPasswordForm'
 import Heading from '@/src/shared/components/typography/Heading'
 import { generatePageTitle } from '@/src/shared/utils/metadata'
@@ -12,7 +13,9 @@ export default function ForgotPasswordPage() {
   return (
     <>
     <Heading >Definir Nuevo Password</Heading>
-    <SetPasswordForm />
+    <Suspense fallback={<div>Loading...</div>}>
+      <SetPasswordForm />
+    </Suspense>
 
      <nav className="flex justify-between mt-20">
         <Link

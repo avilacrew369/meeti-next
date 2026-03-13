@@ -1,5 +1,9 @@
+import { User } from "better-auth";
 import { CommunityInput } from "../schemas/communitySchema";
 import { communityRepository, ICommunityRepository} from "./CommunityRepository";
+import { community } from "@/src/db/schema";
+import { CommuntyPolicy } from "../../policies/CommunityPolicy";
+import { MembersihpPolicy } from "../../policies/MembershipPolicy";
 
 class CommunityService {
     constructor(
@@ -11,6 +15,31 @@ class CommunityService {
             createdBy: userId
         })
         return community
+    }
+    async getUserCommunities(user: User) {
+       const communities = await this.communityRepository.findByUser(user.id)
+
+       const enriched = await Promise.all(communities.map(async (community) => {
+        const isMember = true
+        const isAdmin = CommuntyPolicy.isAdmin(user, community)
+        return {
+            data: community,
+            context: {
+                isMember,
+                isAdmin
+            },
+            permissions: {
+                canEdit: CommuntyPolicy.canEdit(user, community),
+                canDelete: CommuntyPolicy.canDelete(user, community),
+                canJoin: MembersihpPolicy.canJoin(user, community, isMember),
+                canLeave: MembersihpPolicy.canLeave(user, community, isMember),
+                canViewMembers: CommuntyPolicy.canViewMembers(user, community)
+
+            }
+            
+        }
+       }))
+        return enriched
     }
 }
 

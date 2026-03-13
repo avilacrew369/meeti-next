@@ -24,7 +24,7 @@ export default function CreateCommunity() {
       }
       if(success){
         toast.success(success)
-        redirect('/dashboard/communities/')
+        redirect('/dashboard/communities')
       }
     }
   
