@@ -4,6 +4,7 @@ import { communityRepository, ICommunityRepository} from "./CommunityRepository"
 import { community } from "@/src/db/schema";
 import { CommuntyPolicy } from "../../policies/CommunityPolicy";
 import { MembersihpPolicy } from "../../policies/MembershipPolicy";
+import { notFound } from "next/navigation";
 
 class CommunityService {
     constructor(
@@ -40,6 +41,13 @@ class CommunityService {
         }
        }))
         return enriched
+    }
+
+    async getCommunity(communityId: string) {
+        const community = this.communityRepository.findById(communityId)
+        if(!community) notFound()
+        return community
+
     }
 }
 
