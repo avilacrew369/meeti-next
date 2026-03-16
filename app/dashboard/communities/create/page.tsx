@@ -3,13 +3,17 @@ import Link from "next/link"
 import Heading from "@/src/shared/components/typography/Heading"
 import { generatePageTitle } from "@/src/shared/utils/metadata"
 import CreateCommunity from "@/src/features/Communities/components/CreateCommunity"
+import { requireAuth } from "@/src/lib/auth-server"
+import { redirect } from "next/navigation"
 
 const title = 'Crear Comunidad'
 
 export const metadata: Metadata = {
     title: generatePageTitle(title)
 }
-export default function CreateCommunityPage() {
+export default async function CreateCommunityPage() {
+    const {session} = await requireAuth()
+    if(!session) redirect('/auth/login')
     return (
         <>
             <Heading>{title}</Heading>

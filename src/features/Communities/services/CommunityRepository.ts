@@ -2,11 +2,14 @@ import { db } from "@/src/db"
 import { InsertCommunity, SelectCommunity } from "../types/community.types"
 import { community } from "@/src/db/schema"
 import { eq } from "drizzle-orm"
+import { CommunityInput } from "../schemas/communitySchema"
 
 export interface ICommunityRepository {
     create(data: InsertCommunity) : Promise<SelectCommunity>
     findByUser(userId: string, limit?: number) : Promise<SelectCommunity[]>
     findById(communityId: string) : Promise<SelectCommunity | undefined>
+    update(data: CommunityInput, communityId: string) : Promise<void>
+    delete(communityId: string) : Promise<void>
 }
 
 class CommunityRepository implements ICommunityRepository {
@@ -25,13 +28,31 @@ class CommunityRepository implements ICommunityRepository {
     }
 
     async findById(communityId: string): Promise<SelectCommunity | undefined> {
-        const [result] = await db
+        const result = await db
                     .select()
                     .from(community)
                     .where(eq(community.id, communityId))
                     .limit(1)
 
-        return result
+        return result[0]
+    }
+
+    async update(data: CommunityInput, communityId: string){
+         await db.update(community).set({
+
+            ...data
+            
+            // name: data.name,
+            // description: data.description,
+            // image: data.image,
+            
+        }).where(eq(community.id, communityId))
+
+       
+    }
+
+    async delete(communityId: string): Promise<void> {
+        await db.delete(community).where(eq(community.id, communityId))
     }
 }
 
