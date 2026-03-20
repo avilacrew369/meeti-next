@@ -51,8 +51,16 @@ class CommunityService {
         return community
     }
     
-    async getCommunityDetails(communityId: string, user: User) {
+    async getCommunityDetails(communityId: string, user?: User) {
         const community = await this.getCommunity(communityId)
+
+        if(!user) {
+            return {
+                data: community,
+                context: null,
+                permissions: null
+            }
+        }
         const isMember = false
         const isAdmin = CommuntyPolicy.isAdmin(user, community)
 
