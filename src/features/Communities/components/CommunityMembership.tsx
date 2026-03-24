@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { CommunityPermissions } from "../types/community.types"
 import { toggleMembershipAction } from "../../auth/actions/membership-actions"
+import toast from "react-hot-toast"
 
 
 type Props = {
@@ -10,31 +11,27 @@ type Props = {
   communityId: string
 }
 
-export default function CommunityMembership({permissions, communityId} : Props) {
+export default function CommunityMembership({ permissions, communityId }: Props) {
   const [canJoin, setCanJoin] = useState(permissions.canJoin)
-  const [canLeave, setCanLeave] = useState(permissions.canLeave)
 
   const handleClick = async () => {
-    await toggleMembershipAction(communityId)
+    const result = await toggleMembershipAction(communityId)
+
+    if (result?.success) {
+      toast.success(result.message)
+      setCanJoin(result.newPermissions.canJoin)
+
+    }
+
+
   }
 
   return (
     <>
-    { canJoin && (
-
-      <button className="font-bold text-lg  lg:w-auto px-5 py-2 text-wite cursor-pointer bg-orange-400"
-      onClick={handleClick}
-      >Inscribirme a esta comunidad
-     </button>
-    )}
-
-    {canLeave && (
-
-      <button className="font-bold text-lg lg:w-auto  px-5 py-2 text-wite cursor-pointer bg-red-500"
-      onClick={handleClick}
-      >Abandonar Comunidad
-     </button>
-      )}
+       <button className={`${canJoin ? 'bg-orange-500' : 'bg-red-500'}  font-bold text-lg lg:w-auto  px-5 py-2 text-wite cursor-pointer `}
+          onClick={handleClick}
+        >{ canJoin ? 'Inscribirme a esta communidad' : 'Abandonar Comunidad'}
+        </button>
     </>
   )
 }

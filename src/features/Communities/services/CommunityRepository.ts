@@ -28,13 +28,13 @@ class CommunityRepository implements ICommunityRepository {
     }
 
     async findById(communityId: string): Promise<SelectCommunity | undefined> {
-        const result = await db
+        const [result] = await db
                     .select()
                     .from(community)
                     .where(eq(community.id, communityId))
                     .limit(1)
 
-        return result[0]
+        return result
     }
 
     async update(data: CommunityInput, communityId: string){
